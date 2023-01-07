@@ -38,8 +38,8 @@
       ]
     },
     "C:\\Users\\Desktop\\Desktop\\CryptoRaiser\\new\\cryptoraiser\\contracts\\Campaign.sol": {
-      "lastModificationDate": 1673076392083,
-      "contentHash": "5556d824e7fcec3ec1bf0fdcf4cd5770",
+      "lastModificationDate": 1673084867727,
+      "contentHash": "fc2356cc9c1b9ab14f7d1491d0f16a26",
       "sourceName": "contracts/Campaign.sol",
       "solcConfig": {
         "version": "0.8.10",

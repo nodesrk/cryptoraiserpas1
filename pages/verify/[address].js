@@ -35,13 +35,15 @@ export default function Detail({Data, VerifiedData}) {
       fetch('https://cryptoraiser.infura-ipfs.io/ipfs/' + Data.storyUrl)
             .then(res => res.text()).then(data => storyData = data);
 
-      const MyVerify = contract.filters.verify(Address);
+      const MyVerify = contract.filters.verified(Address);
       const MyAllVerify = await contract.queryFilter(MyVerify);
 
       setMydonations(MyAllVerify.map((e) => {
         return {
           address: e.args.requestaddress,
-          value: e.args.val,
+          value:parseInt(e.args.val),
+          timestamp: parseInt(e.args.timestamp)
+
         }
       }));
 
@@ -113,9 +115,10 @@ export default function Detail({Data, VerifiedData}) {
             <DonationTitle>Recent Donation</DonationTitle>
             {VerifiedData.map((e) => {
               return (
-                <Donation>
+                <Donation key={e.timestamp}>
                   <DonationData>{e.address}</DonationData>
                   <DonationData>{e.val} Matic</DonationData>
+                  
                 </Donation>
               )
             })
@@ -125,7 +128,7 @@ export default function Detail({Data, VerifiedData}) {
             <DonationTitle>My Past Donation</DonationTitle>
             {mydonations.map((e) => {
               return (
-                <Donation>
+                <Donation key={e.timestamp}>
                 <DonationData>{e.address}</DonationData>
                 <DonationData>{e.val} Matic</DonationData>
               </Donation>
@@ -186,7 +189,8 @@ export async function getStaticProps(context) {
   // const AllDonations = await contract.queryFilter(Donations);
 
   const Verify = contract.filters.verified();
-  const AllVerified =  await contract.queryFilter(Verify)
+  console.log(Verify);
+  const AllVerified =  await contract.queryFilter(Verify);
 
 
   const Data = {
@@ -200,9 +204,12 @@ export async function getStaticProps(context) {
   }
 
   const VerifiedData =  AllVerified.map((e) => {
+
+    console.log(e);
     return {
       address: e.args.requestaddress,
-      value: e.args.val
+      value: parseInt(e.args.val),
+      timestamp: parseInt(e.args.timestamp)
   }});
 
   return {

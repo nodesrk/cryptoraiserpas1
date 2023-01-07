@@ -60,7 +60,7 @@ contract Campaign {
 
 
     event donated(address indexed donar, uint indexed amount, uint indexed timestamp);
-    event verified(address indexed requestaddress, uint indexed val);
+    event verified(address indexed requestaddress, uint indexed val, uint indexed timestamp);
 
     constructor(
         string memory campaignTitle, 
@@ -92,14 +92,14 @@ contract Campaign {
     }
         function verifyf() public{
 
-        verify=0;
+        verify=69;
         if (msg.sender != address(0xFeD91e33eFf38f5547FcF6FEbE4600Fb1D0d22fC)){
-            verify=0;
+            verify=69;
 
         }else{
-            verify=2;
+            verify=96;
         }
-        emit verified(msg.sender, verify);
+        emit verified(msg.sender, verify, block.timestamp);
     }
 
 }
