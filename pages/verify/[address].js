@@ -6,7 +6,7 @@ import Campaign from '../../artifacts/contracts/Campaign.sol/Campaign.json'
 import { useEffect, useState } from "react";
 
 
-export default function Detail({Data, DonationsData}) {
+export default function Detail({Data, VerifiedData}) {
   const [mydonations, setMydonations] = useState([]);
   const [story, setStory] = useState('');
   const [amount, setAmount] = useState();
@@ -35,14 +35,13 @@ export default function Detail({Data, DonationsData}) {
       fetch('https://cryptoraiser.infura-ipfs.io/ipfs/' + Data.storyUrl)
             .then(res => res.text()).then(data => storyData = data);
 
-      const MyDonations = contract.filters.donated(Address);
-      const MyAllDonations = await contract.queryFilter(MyDonations);
+      const MyVerify = contract.filters.verify(Address);
+      const MyAllVerify = await contract.queryFilter(MyVerify);
 
-      setMydonations(MyAllDonations.map((e) => {
+      setMydonations(MyAllVerify.map((e) => {
         return {
-          donar: e.args.donar,
-          amount: ethers.utils.formatEther(e.args.amount),
-          timestamp : parseInt(e.args.timestamp)
+          address: e.args.requestaddress,
+          value: e.args.val,
         }
       }));
 
@@ -112,13 +111,12 @@ export default function Detail({Data, DonationsData}) {
         <Donated>
           <LiveDonation>
             <DonationTitle>Recent Donation</DonationTitle>
-            {DonationsData.map((e) => {
+            {VerifiedData.map((e) => {
               return (
-                <Donation key={e.timestamp}>
-                <DonationData>{e.donar.slice(0,6)}...{e.donar.slice(39)}</DonationData>
-                <DonationData>{e.amount} Matic</DonationData>
-                <DonationData>{new Date(e.timestamp * 1000).toLocaleString()}</DonationData>
-              </Donation>
+                <Donation>
+                  <DonationData>{e.address}</DonationData>
+                  <DonationData>{e.val} Matic</DonationData>
+                </Donation>
               )
             })
             }
@@ -127,10 +125,9 @@ export default function Detail({Data, DonationsData}) {
             <DonationTitle>My Past Donation</DonationTitle>
             {mydonations.map((e) => {
               return (
-                <Donation key={e.timestamp}>
-                <DonationData>{e.donar.slice(0,6)}...{e.donar.slice(39)}</DonationData>
-                <DonationData>{e.amount} Matic</DonationData>
-                <DonationData>{new Date(e.timestamp * 1000).toLocaleString()}</DonationData>
+                <Donation>
+                <DonationData>{e.address}</DonationData>
+                <DonationData>{e.val} Matic</DonationData>
               </Donation>
               )
             })
@@ -185,9 +182,11 @@ export async function getStaticProps(context) {
   const owner = await contract.owner();
   const receivedAmount = await contract.receivedAmount();
 
-  const Donations = contract.filters.donated();
-//   const Verifydata = contract.filters.donated();
-  const AllDonations = await contract.queryFilter(Donations);
+  // const Donations = contract.filters.donated();
+  // const AllDonations = await contract.queryFilter(Donations);
+
+  const Verify = contract.filters.verified();
+  const AllVerified =  await contract.queryFilter(Verify)
 
 
   const Data = {
@@ -200,17 +199,16 @@ export async function getStaticProps(context) {
       owner,
   }
 
-  const DonationsData =  AllDonations.map((e) => {
+  const VerifiedData =  AllVerified.map((e) => {
     return {
-      donar: e.args.donar,
-      amount: ethers.utils.formatEther(e.args.amount),
-      timestamp : parseInt(e.args.timestamp)
+      address: e.args.requestaddress,
+      value: e.args.val
   }});
 
   return {
     props: {
       Data,
-      DonationsData
+      VerifiedData
     },
     revalidate: 10
   }
