@@ -118,7 +118,6 @@ export default function Detail({Data, VerifiedData}) {
                 <Donation key={e.timestamp}>
                   <DonationData>{e.address}</DonationData>
                   <DonationData>{e.val} Matic</DonationData>
-                  
                 </Donation>
               )
             })
@@ -129,9 +128,9 @@ export default function Detail({Data, VerifiedData}) {
             {mydonations.map((e) => {
               return (
                 <Donation key={e.timestamp}>
-                <DonationData>{e.address}</DonationData>
-                <DonationData>{e.val} Matic</DonationData>
-              </Donation>
+                  <DonationData>{e.address}</DonationData>
+                  <DonationData>{e.val} Matic</DonationData>
+                </Donation>
               )
             })
             }
