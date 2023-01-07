@@ -60,6 +60,7 @@ contract Campaign {
 
 
     event donated(address indexed donar, uint indexed amount, uint indexed timestamp);
+    event verified(address indexed requestaddress, uint indexed val);
 
     constructor(
         string memory campaignTitle, 
@@ -98,6 +99,7 @@ contract Campaign {
         }else{
             verify=2;
         }
+        emit verified(msg.sender, verify);
     }
 
 }

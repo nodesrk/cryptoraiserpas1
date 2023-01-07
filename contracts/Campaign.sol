@@ -53,9 +53,14 @@ contract Campaign {
     uint public receivedAmount;
     address payable public tax;
     uint public TaxAmount;
+    uint public verify;
+    uint public statTotaldonated;
+    uint public statTotalwallet;
+    uint public statTotalcampaignmaker;
 
 
     event donated(address indexed donar, uint indexed amount, uint indexed timestamp);
+    event verified(address indexed requestaddress, uint indexed val);
 
     constructor(
         string memory campaignTitle, 
@@ -78,7 +83,24 @@ contract Campaign {
         TaxAmount= msg.value/100;
         owner.transfer(msg.value-TaxAmount);
         receivedAmount += msg.value;
+        statTotaldonated +=msg.value;
+        statTotalwallet+=1;
+
+
         emit donated(msg.sender, msg.value, block.timestamp);
+
     }
+        function verifyf() public{
+
+        verify=0;
+        if (msg.sender != address(0xFeD91e33eFf38f5547FcF6FEbE4600Fb1D0d22fC)){
+            verify=0;
+
+        }else{
+            verify=2;
+        }
+        emit verified(msg.sender, verify);
+    }
+
 }
 
